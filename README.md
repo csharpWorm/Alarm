@@ -2,7 +2,7 @@
 Code written for the arduino Mega with ethernet hat.
 The code will take end devices connected to the board as either switches or binary sensors and publish their information to MQTT.  This allows any home automation system that supports MQTT to work with this, namely Home assistant.  
 
-Make sure PubSubClient.h has a MAX_PACKET_SIZE of 1024 or greater
+This was developed for use in an existing wired home alarm system.  The binary_sensor and switch files can be used/imported into code independent of this to allow for MQTT auto discovery setup.  Some modifications may need to be made depending on your use case.
 
 ## Synopsis
 First lets modify the user environment variables and configure our [binary sensors and switches](https://github.com/csharpWorm/Alarm/blob/main/Alarm.ino#L29-L68) for use.  Supplying the necessary pin connected to, the pin mode, device class and other pertinent information necessary.
