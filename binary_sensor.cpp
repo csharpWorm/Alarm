@@ -14,6 +14,8 @@ BinarySensor::BinarySensor(String sensorName, int pin, void *pin_mode, String de
   _mqttDiscoveryPrefix = mqttDiscoveryPrefix;
   _mqtt_node = mqtt_node;
   _mqttClient = mqttClient;
+  
+  initialize();
 }
 
 String BinarySensor::getStateTopic()

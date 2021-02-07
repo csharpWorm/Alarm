@@ -10,6 +10,7 @@ class Switch
     int _pin;
     void* _pinMode;
     PubSubClient* _mqttClient;
+    void initialize();
 
   public:
     Switch(String switchName, int pin, void *pin_mode, String mqttDiscoveryPrefix, String mqtt_node, PubSubClient *mqttClient);
@@ -19,7 +20,6 @@ class Switch
     String getConfigPayload();
     String getCommandTopic();
     int pin(){return _pin;}
-    void initialize();
     void mqtt_publish();
     boolean mqtt_publish_config();
     boolean mqtt_publish_state();

@@ -11,6 +11,7 @@ class BinarySensor
     void* _pinMode;
     String _deviceClass;
     PubSubClient* _mqttClient;
+    void initialize();
 
   public:
     BinarySensor(String sensorName, int pin, void *pin_mode, String deviceClass, String mqttDiscoveryPrefix, String mqtt_node, PubSubClient *mqttClient);
@@ -19,7 +20,6 @@ class BinarySensor
     String getStateTopic();
     String getConfigPayload();
     int pin(){return _pin;}
-    void initialize();
     void mqtt_publish();
     boolean mqtt_publish_config();
     boolean mqtt_publish_state();
