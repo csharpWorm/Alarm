@@ -95,18 +95,6 @@ void setup() {
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 
-  // Initialize Sensor pinmode
-  for (int i = 0; i < (sizeof(sensors) / sizeof(sensors[0])); i++)
-  {
-    sensors[i].initialize();
-  }
-
-  // Initialize relay pinmode
-  for (int i = 0; i < (sizeof(relays) / sizeof(relays[0])); i++)
-  {
-    relays[i].initialize();
-  }
-
 #ifndef DEBUG_MQTT_SETUP
   timer.setInterval(200, checkButtons);
   timer.setInterval(2000, mqtt_client_loop);
