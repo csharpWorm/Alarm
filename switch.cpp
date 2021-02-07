@@ -13,6 +13,8 @@ Switch::Switch(String switchName, int pin, void *pin_mode, String mqttDiscoveryP
   _mqtt_node = mqtt_node;
   _mqttClient = mqttClient;
   _pinMode = pin_mode;
+  
+  initialize();
 }
 
 String Switch::getStateTopic()
