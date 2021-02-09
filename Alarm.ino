@@ -91,7 +91,8 @@ void setup() {
     Serial.print("  DHCP assigned IP ");
     Serial.println(Ethernet.localIP());
   }
-
+  
+  client.setBufferSize(1024);
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 
