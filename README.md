@@ -34,7 +34,7 @@ To modify the behavior of a switch check out the turn_on and turn_off methods in
 
 The first order of business will be to setup the Arduino IDE to flash the provided Arduino sketch to the Arduino Mega 2560.  [Download the IDE for your platform](https://www.arduino.cc/en/Main/Software) and [follow these instructions to familiarize yourself with the IDE and how to upload to the board](https://www.arduino.cc/en/Guide/ArduinoMega2560).
 
-Next you will need to add the PubSubClient library for MQTT.  [Follow this guide for the general process](https://www.arduino.cc/en/Guide/Libraries) and add the 'PubSubClient' from the Library Manager.  The code is using `setBufferSize(1024)` to override the default `MQTT_MAX_PACKET_SIZE` of 128.  If for some reason your messages are not being published you can modify [Alarm.ino](https://github.com/csharpWorm/Alarm/blob/main/Alarm.ino#L95) and pass in a larger buffer size.
+Next you will need to add the PubSubClient library for MQTT.  [Follow this guide for the general process](https://www.arduino.cc/en/Guide/Libraries) and add the 'PubSubClient' from the Library Manager.  The code is using `setBufferSize(1024)` to override the default `MQTT_MAX_PACKET_SIZE` of 128.  If for some reason your messages are not being published you can modify [Alarm.ino](https://github.com/csharpWorm/Alarm/blob/main/Alarm.ino#L95) and pass in a larger buffer size. You will need PubSubClient version 2.8 or greater installed.
 
 > If this still does not work you will need to edit the `PubSubClient.h` file and change the line `#define MQTT_MAX_PACKET_SIZE 128` to `#define MQTT_MAX_PACKET_SIZE 1024`.  You can find the installed library under the path shown in `File > Preferences > Sketchbook location`.
 
