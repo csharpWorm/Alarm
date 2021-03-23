@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "binary_sensor.h"
 #include "switch.h"
+#include "moisture_sensor.h"
 #include <SimpleTimer.h> // using https://github.com/marcelloromani/arduino/tree/master/SimpleTimer
 #include <PubSubClient.h>
 #include <Ethernet.h>
@@ -67,6 +68,11 @@ Switch relays[8] = {Switch("Heat Master", 42, OUTPUT, mqttDiscoveryPrefix, mqtt_
                     Switch("Heat Main AC", 49, OUTPUT, mqttDiscoveryPrefix, mqtt_node, &client)
                    };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                     SETUP MOISTURE SENSORS                                           //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+MoistureSensor moistureSensors[1] = { MoistureSensor("Garden Soil Moisture", 0, 560, 260, mqttDiscoveryPrefix, mqtt_node, &client)
+                                    };
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                      MAIN (setup & loop)                                             //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup() {
@@ -91,7 +97,7 @@ void setup() {
     Serial.print("  DHCP assigned IP ");
     Serial.println(Ethernet.localIP());
   }
-  
+
   client.setBufferSize(1024);
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
@@ -99,6 +105,7 @@ void setup() {
 #ifndef DEBUG_MQTT_SETUP
   timer.setInterval(200, checkButtons);
   timer.setInterval(2000, mqtt_client_loop);
+  timer.setInterval(900000, checkSoilMoisture); // check every 15 minutes
 #endif
 }
 
@@ -189,5 +196,15 @@ void checkButtons()
     // if the current state and actual state do not match publish the new state
     if (!sensors[i].getBinaryState().equalsIgnoreCase(sensors[i].currentState))
       sensors[i].mqtt_publish_state();
+  }
+}
+
+void checkSoilMoisture()
+{
+  for (int i = 0; i < (sizeof(moistureSensors) / sizeof(moistureSensors[0])); i++)
+  {
+    // If the moisture reading has changed then publish the new value
+    if (moistureSensors[i].getValue() != moistureSensors[i].currentValue)
+      moistureSensors[i].mqtt_publish_state();
   }
 }
