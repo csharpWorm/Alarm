@@ -1,31 +1,40 @@
 #include "Arduino.h"
 #include "switch.h"
 
-Switch::Switch() : Sensor(){}
-Switch::Switch(String switchName, int pin, void *pin_mode, String mqttDiscoveryPrefix, String mqtt_node, PubSubClient *mqttClient) : Sensor(switchName, pin, mqttDiscoveryPrefix, mqtt_node, mqttClient)
+Switch::Switch(){}
+Switch::Switch(String switchName, int pin, void *pin_mode, String mqttDiscoveryPrefix, String mqtt_node, PubSubClient *mqttClient)
 {
+  _switchName = switchName;
+  _mqttSwitchName = switchName;
+  _mqttSwitchName.replace(" ","_");
+  _mqttSwitchName.toLowerCase();
+  _pin = pin;
+  _mqttDiscoveryPrefix = mqttDiscoveryPrefix;
+  _mqtt_node = mqtt_node;
+  _mqttClient = mqttClient;
   _pinMode = pin_mode;
+  
   initialize();
 }
 
 String Switch::getStateTopic()
 {
-  return _mqttDiscoveryPrefix + "/switch/" + _mqtt_node + "_" + _mqttSensorName + "/state";
+  return _mqttDiscoveryPrefix + "/switch/" + _mqtt_node + "_" + _mqttSwitchName + "/state";
 }
 
 String Switch::getConfigTopic()
 {
-  return _mqttDiscoveryPrefix + "/switch/" + _mqtt_node + "_" + _mqttSensorName + "/config";
+  return _mqttDiscoveryPrefix + "/switch/" + _mqtt_node + "_" + _mqttSwitchName + "/config";
 }
 
 String Switch::getConfigPayload()
 {
-  return "{\"name\": \"" + _mqtt_node + "_" + _mqttSensorName + "\", \"command_topic\": \"" + getCommandTopic() + "\", \"state_topic\": \"" + getStateTopic() + "\"}";
+  return "{\"name\": \"" + _mqtt_node + "_" + _mqttSwitchName + "\", \"command_topic\": \"" + getCommandTopic() + "\", \"state_topic\": \"" + getStateTopic() + "\"}";
 }
 
 String Switch::getCommandTopic()
 {
-  return _mqttDiscoveryPrefix + "/switch/" + _mqtt_node + "_" + _mqttSensorName + "/set";
+  return _mqttDiscoveryPrefix + "/switch/" + _mqtt_node + "_" + _mqttSwitchName + "/set";
 }
 
 void Switch::initialize()
@@ -47,28 +56,28 @@ void Switch::mqtt_publish()
   Serial.println("Configuration Topic Published: " + config_publish);
   delay(200);
   boolean state_publish = mqtt_publish_state();
-  Serial.println("State Topic Published: " + state_publish);
+  Serial.println("Configuration Topic Published: " + state_publish);
   delay(200);
   boolean command_publish = mqtt_subscribe_command();
- Serial.println("Command Topic Published: " + command_publish);
+ Serial.println("Configuration Topic Published: " + command_publish);
 }
 
 boolean Switch::mqtt_publish_config()
 {
-  Serial.println("MQTT discovery " + _sensorName + " config: [" + getConfigTopic() + "] : [" + getConfigPayload() + "]");
+  Serial.println("MQTT discovery " + _switchName + " config: [" + getConfigTopic() + "] : [" + getConfigPayload() + "]");
   return _mqttClient->publish(getConfigTopic().c_str(), getConfigPayload().c_str(), true);
 }
 boolean Switch::mqtt_publish_state()
 {
   // publish MQTT discovery topics and device state
-  Serial.println("MQTT discovery " + _sensorName + " state: [" + getStateTopic() + "] : [" + getBinaryState() + "]");
+  Serial.println("MQTT discovery " + _switchName + " state: [" + getStateTopic() + "] : [" + getBinaryState() + "]");
   currentState = getBinaryState();
   return _mqttClient->publish(getStateTopic().c_str(), currentState.c_str());
 }
 
 boolean Switch::mqtt_subscribe_command()
 {
-  Serial.println("MQTT discovery " + _sensorName + " command: [" + getCommandTopic() + "]");
+  Serial.println("MQTT discovery " + _switchName + " command: [" + getCommandTopic() + "]");
   return _mqttClient->subscribe(getCommandTopic().c_str());
 }
 

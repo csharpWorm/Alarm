@@ -1,19 +1,25 @@
 #include<PubSubClient.h>
-#include "sensor.h"
-
-class Switch : public Sensor
+class Switch
 {
   private:
+
+    String _switchName;
+    String _mqttSwitchName;
+    String _mqttDiscoveryPrefix;
+    String _mqtt_node;
+    int _pin;
     void* _pinMode;
+    PubSubClient* _mqttClient;
     void initialize();
 
   public:
-    Switch(String sensorName, int pin, void *pin_mode, String mqttDiscoveryPrefix, String mqtt_node, PubSubClient *mqttClient);
+    Switch(String switchName, int pin, void *pin_mode, String mqttDiscoveryPrefix, String mqtt_node, PubSubClient *mqttClient);
     Switch();
     String getConfigTopic();
     String getStateTopic();
     String getConfigPayload();
     String getCommandTopic();
+    int pin(){return _pin;}
     void mqtt_publish();
     boolean mqtt_publish_config();
     boolean mqtt_publish_state();
