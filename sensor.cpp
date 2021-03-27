@@ -37,3 +37,8 @@ String Sensor::getCommandTopic()
   // Should be defined in child class
   return "";
 }
+
+int Sensor::getSensorValue()
+{
+  return analogRead(_pin);
+}

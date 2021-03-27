@@ -21,20 +21,15 @@ String MoistureSensor::getConfigTopic()
 
 String MoistureSensor::getConfigPayload()
 {
-  return "{\"device_class\": \"humidity\", \"name\": \"" + _mqtt_node + "_" + _mqttSensorName + "\", \"state_topic\": \"" + getStateTopic() + "\", \"unit_of_measurement\": \"%\", \"value_template\": \"{{ value_json.humidity}}\" }";
+  return "{\"device_class\": \"humidity\", \"name\": \"" + _mqtt_node + "_" + _mqttSensorName + "\", \"state_topic\": \"" + getStateTopic() + "\", \"unit_of_measurement\": \"%\", \"value_template\": \"{{ value_json.moisture}}\" }";
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                              HELPERS                                                 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-int MoistureSensor::getValue()
-{
-  return analogRead(_pin);
-}
-
 double MoistureSensor::getMoisturePercent()
 {
-  return 100 - map(getValue(), _waterValue, _airValue, 0, 100);
+  return 100 - map(getSensorValue(), _waterValue, _airValue, 0, 100);
 }
 
 void MoistureSensor::mqtt_publish()
@@ -56,7 +51,7 @@ boolean MoistureSensor::mqtt_publish_state()
 {
   // publish MQTT discovery topics and device state
   Serial.println("MQTT discovery " + _sensorName + " state: [" + getStateTopic() + "] : [" + getMoisturePercent() + "]");
-  currentValue = getValue();
-  String moisturePercent_str = "{\"humidity\": " + String(getMoisturePercent()) + "}";
+  currentValue = getSensorValue();
+  String moisturePercent_str = "{\"moisture\": " + String(getMoisturePercent()) + "}";
   return _mqttClient->publish(getStateTopic().c_str(), moisturePercent_str.c_str());
 }

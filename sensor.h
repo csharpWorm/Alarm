@@ -21,6 +21,7 @@ class Sensor
     virtual String getStateTopic();
     virtual String getConfigPayload();
     virtual String getCommandTopic();
+    int getSensorValue();
     int pin(){return _pin;}
     //virtual void mqtt_publish();
     //virtual boolean mqtt_publish_config();

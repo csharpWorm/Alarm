@@ -204,7 +204,7 @@ void checkSoilMoisture()
   for (int i = 0; i < (sizeof(moistureSensors) / sizeof(moistureSensors[0])); i++)
   {
     // If the moisture reading has changed then publish the new value
-    if (moistureSensors[i].getValue() != moistureSensors[i].currentValue)
+    if (moistureSensors[i].getSensorValue() != moistureSensors[i].currentValue)
       moistureSensors[i].mqtt_publish_state();
   }
 }

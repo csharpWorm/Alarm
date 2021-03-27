@@ -12,7 +12,6 @@ class MoistureSensor : public Sensor
     String getConfigTopic();
     String getStateTopic();
     String getConfigPayload();
-    int getValue();
     void mqtt_publish();
     boolean mqtt_publish_config();
     boolean mqtt_publish_state();
