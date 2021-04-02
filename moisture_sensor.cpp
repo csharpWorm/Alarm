@@ -1,3 +1,8 @@
+///////////////////////////////////////
+// Known to work with DFRobotics     //
+// Capacitive analog moisture sensor //
+// SKU:SEN0193 and SEN0308           //
+///////////////////////////////////////
 #include "Arduino.h"
 #include "moisture_sensor.h"
 
